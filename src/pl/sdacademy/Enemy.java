@@ -2,8 +2,7 @@ package pl.sdacademy;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static pl.sdacademy.ConsoleUtils.C_RED;
-import static pl.sdacademy.ConsoleUtils.C_RESET;
+import static pl.sdacademy.ConsoleUtils.*;
 
 public class Enemy {
 
@@ -34,7 +33,7 @@ public class Enemy {
     }
 
     public Enemy() {
-        System.out.println("empty constructor called");
+        printDebug("empty constructor called from Enemy class");
         enemiesCount++;
     }
 

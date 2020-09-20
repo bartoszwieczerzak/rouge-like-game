@@ -2,11 +2,14 @@ package pl.sdacademy;
 
 import java.util.Date;
 
+import static pl.sdacademy.ConsoleUtils.*;
+import static pl.sdacademy.Sex.*;
+
 public class Hero {
 
     //statistics given by player
-    private String name = "unnamed_hero";
-    private Sex sex = Sex.MALE;
+    private String name;
+    private Sex sex;
 
     // phisical stats
     private int strength;
@@ -31,10 +34,10 @@ public class Hero {
     private Buff buffs = null;
 
     public Hero(String name, Sex sex, int strength, int stamina, int dexterity, int intelligence, int wisdom, int charisma) {
-        enemy = new Enemy("HERO_ENEMY");
-        int maleBonus = sex == Sex.MALE ? 10 : 0;
-        int femaleBonus = sex == Sex.FEMALE ? 10 : 0;
-        int otherBonus = sex == Sex.OTHER ? 10 : 0;
+        //enemy = new Enemy("HERO_ENEMY");
+        int maleBonus = sex == MALE ? 10 : 0;
+        int femaleBonus = sex == FEMALE ? 10 : 0;
+        int otherBonus = sex == OTHER ? 10 : 0;
 
         this.name = name;
         this.sex = sex;
@@ -54,6 +57,7 @@ public class Hero {
 
         this.coins = 0;
     }
+
     public void printInfo() {
         System.out.println("===== HERO STATS =====\n" +
                 "name: " + name +
@@ -78,13 +82,15 @@ public class Hero {
     }
 
     public void applyDamage(byte amount) {
-        System.out.println("Dealing " + amount + " damage to " + name);
+        System.out.println("Dealing " + c_red(String.valueOf(amount)) + " damage to " + name);
         health -= amount;
 
         if(health < 0) {
             health = 0;
 
-            System.out.println("Enemy: " + name + " is dead!");
+            printDebug("GRACZ ZGINAL - KONIEC GRY");
+            System.out.println("Hero: " + name + " is dead!");
+            System.exit(0);
         }
     }
 
@@ -101,7 +107,7 @@ public class Hero {
                 break;
             case 'A':
                 attackValue = baseDamage * 5;
-                hitChance = dexterity * 1;
+                hitChance = dexterity;
                 break;
             case 'F':
                 attackValue = baseDamage * 10;
@@ -128,6 +134,6 @@ public class Hero {
 
     public Enemy getThing() {
         Date d = new Date();
-        return (Enemy) enemy;
+        return enemy;
     }
 }
