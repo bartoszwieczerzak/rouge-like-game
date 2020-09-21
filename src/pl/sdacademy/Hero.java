@@ -59,19 +59,20 @@ public class Hero {
     }
 
     public void printInfo() {
-        System.out.println("===== HERO STATS =====\n" +
+        System.out.println(
+        c_green("===== HERO STATS =====\n") +
                 "name: " + name +
                 "\nsex: " + sex.name() +
                 "\nhealth: " + health +
                 "\nmana: " + mana +
-                "\n====STATS====" +
+        c_green("\n==== STATS ====") +
                 "\nstrength: " + strength +
                 "\nstamina: " + stamina +
                 "\ndexterity: " + dexterity +
                 "\nintelligence: " + intelligence +
                 "\nwisdom: " + wisdom +
                 "\ncharisma: " + charisma +
-                "\n====FIGHTS====" +
+        c_green("\n==== FIGHT STATS ====") +
                 "\nbaseDamage: " + baseDamage +
                 "\nbaseBlock: " + baseBlock +
                 "\ncoins: " + coins +
@@ -89,7 +90,7 @@ public class Hero {
             health = 0;
 
             printDebug("GRACZ ZGINAL - KONIEC GRY");
-            System.out.println("Hero: " + name + " is dead!");
+
             System.exit(0);
         }
     }
@@ -124,10 +125,6 @@ public class Hero {
 
         mana -= manaCost;
         enemy.applyDamage((byte) attackValue, hitChance);
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     private Enemy enemy;

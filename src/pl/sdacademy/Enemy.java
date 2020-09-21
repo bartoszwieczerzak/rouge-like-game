@@ -38,8 +38,6 @@ public class Enemy {
     }
 
     public Enemy(String name) {
-//        super();
-        this();
         this.name = name;
     }
 
@@ -54,7 +52,7 @@ public class Enemy {
         System.out.println("[DEBUG] random: " + random + " attackChance: " + attackHitChance);
 
         if (isHit) {
-            System.out.println("Dealing " + C_RED + amount + C_RESET + " damage to " + name);
+            System.out.println("Dealing " + c_red(String.valueOf(amount)) + " damage to " + name);
             health -= amount;
 
             // przypadek gdy wrog zginal
@@ -67,6 +65,10 @@ public class Enemy {
         } else {
             System.out.println("Enemy dodged this!");
         }
+    }
+
+    public void attack(Hero hero) {
+        hero.applyDamage((byte)5);
     }
 
     public void getRandomTaunt() {

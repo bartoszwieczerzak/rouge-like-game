@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class ConsoleUtils {
     public static boolean debugMode = false;
+    public static boolean errorLoggingMode = true;
 
 
     public static final String C_RESET = "\u001B[0m";
@@ -54,6 +55,10 @@ public class ConsoleUtils {
         return C_RED + message + C_RESET;
     }
 
+    public static String c_green(String message) {
+        return C_GREEN + message + C_RESET;
+    }
+
     public static String promptForString(String prompt) {
         Scanner myObj = new Scanner(System.in);
         System.out.print(prompt);
@@ -94,7 +99,13 @@ public class ConsoleUtils {
 
     public static void printDebug(String msg) {
         if (debugMode) {
-            System.out.println("[DEBUG] " + msg);
+            System.out.println(c_green("[DEBUG] " + msg));
+        }
+    }
+
+    public static void printError(String msg) {
+        if (errorLoggingMode) {
+            System.out.println(c_red("[ERROR] " + msg));
         }
     }
 }

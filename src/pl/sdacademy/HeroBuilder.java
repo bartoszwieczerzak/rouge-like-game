@@ -11,17 +11,13 @@ import static pl.sdacademy.Sex.*;
  */
 public class HeroBuilder {
 
-    private static HeroBuilder Instance;
+    private static final HeroBuilder instance = new HeroBuilder();
 
     private HeroBuilder() {
     }
 
     public static HeroBuilder getInstance() {
-        if (Instance == null) {
-            Instance = new HeroBuilder();
-        }
-
-        return Instance;
+        return instance;
     }
 
     private static int skillPoints = 100;
@@ -93,6 +89,7 @@ public class HeroBuilder {
             );
 
             int choice = promptForInt("Please input a number> ");
+
             switch (choice) {
                 case 1: strength = readSkillValueFor("strength", strength); break;
                 case 2: stamina = readSkillValueFor("stamina", stamina); break;
