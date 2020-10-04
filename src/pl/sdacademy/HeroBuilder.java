@@ -26,7 +26,7 @@ public class HeroBuilder {
     public Hero buildHeroForTesting() {
         skillPoints = 0;
         // name, sex, strength, stamina, dexterity, intelligence, wisdom, charisma
-        return new Hero("HERCULES", Sex.MALE, 95, 1, 1, 1, 1, 1);
+        return new Hero("Bartek", MALE, 30, 10, 20, 20, 10, 10);
     }
 
     public Hero buildHero() {
@@ -38,7 +38,7 @@ public class HeroBuilder {
 
         Sex sex;
 
-        // Ustawia zmienną sex na MALE, FEMALE lub OTHER zaczytując z konsoloi
+        // Ustawia zmienną sex na MALE, FEMALE lub OTHER zaczytując z konsoli
         switch (lowerCasesexInput) {
             case "m":
             case "ma":

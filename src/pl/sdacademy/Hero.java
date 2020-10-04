@@ -1,136 +1,145 @@
 package pl.sdacademy;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import static pl.sdacademy.ConsoleUtils.*;
-import static pl.sdacademy.Sex.*;
+import static pl.sdacademy.GameMath.clampMax;
+import static pl.sdacademy.GameMath.clampMin;
 
-public class Hero {
+public class Hero extends GameCharacter {
 
-    //statistics given by player
-    private String name;
-    private Sex sex;
+    private List<Integer> inventory = new ArrayList<>();
 
-    // phisical stats
-    private int strength;
-    private int stamina;
-    private int dexterity;
-
-    // mind stats
-    private int intelligence;
-    private int wisdom;
-    private int charisma;
-
-    // base stats
-    private float baseDamage;
-    private float baseBlock;
-
-    // derived stats
-    private float movementSpeed;
-    private float mana;
-    private float health;
-
-    private int coins;
-    private Buff buffs = null;
 
     public Hero(String name, Sex sex, int strength, int stamina, int dexterity, int intelligence, int wisdom, int charisma) {
-        //enemy = new Enemy("HERO_ENEMY");
-        int maleBonus = sex == MALE ? 10 : 0;
-        int femaleBonus = sex == FEMALE ? 10 : 0;
-        int otherBonus = sex == OTHER ? 10 : 0;
-
-        this.name = name;
-        this.sex = sex;
-        this.strength = strength + maleBonus;
-        this.stamina = stamina + maleBonus;
-        this.dexterity = dexterity + femaleBonus;
-        this.intelligence = intelligence + femaleBonus;
-        this.wisdom = wisdom + otherBonus;
-        this.charisma = charisma + otherBonus;
-
-        this.baseDamage = strength * 0.1f;
-        this.baseBlock = dexterity * 0.1f;
-        this.movementSpeed = stamina * 0.1f;
-
-        this.health = strength * 0.5f + stamina * 0.2f + dexterity * 0.1f;
-        this.mana = intelligence * 0.5f + wisdom + stamina * 0.1f;
-
-        this.coins = 0;
-    }
-
-    public void printInfo() {
-        System.out.println(
-        c_green("===== HERO STATS =====\n") +
-                "name: " + name +
-                "\nsex: " + sex.name() +
-                "\nhealth: " + health +
-                "\nmana: " + mana +
-        c_green("\n==== STATS ====") +
-                "\nstrength: " + strength +
-                "\nstamina: " + stamina +
-                "\ndexterity: " + dexterity +
-                "\nintelligence: " + intelligence +
-                "\nwisdom: " + wisdom +
-                "\ncharisma: " + charisma +
-        c_green("\n==== FIGHT STATS ====") +
-                "\nbaseDamage: " + baseDamage +
-                "\nbaseBlock: " + baseBlock +
-                "\ncoins: " + coins +
-                "\nmovementSpeed: " + movementSpeed +
-                "\nbuffs: " + buffs +
-                "\n"
-        );
+        super(name, sex, strength, stamina, dexterity, intelligence, wisdom, charisma);
     }
 
     public void applyDamage(byte amount) {
-        System.out.println("Dealing " + c_red(String.valueOf(amount)) + " damage to " + name);
-        health -= amount;
+        currentHealth -= amount;
 
-        if(health < 0) {
-            health = 0;
+        if(currentHealth <= 0) {
+            currentHealth = 0;
 
-            printDebug("GRACZ ZGINAL - KONIEC GRY");
+            Game.getInstance().addMessageToQueue(msgDeath(name));
+            printDebug("PLAYER DIED - GAME OVER");
+            printDebug("YOU KILLED " + (Game.getInstance().enemiesCount - 1) + " enemies.");
 
             System.exit(0);
         }
     }
 
+    public void addHealth(int amount) {
+        currentHealth += amount;
+
+        currentHealth = clampMax(currentHealth, health);
+        Game.getInstance().addMessageToQueue(msgHealed(""+amount));
+    }
+
+    public void addMana(int amount) {
+        currentMana += amount;
+
+        currentMana = clampMax(currentMana, mana);
+        Game.getInstance().addMessageToQueue(msgManaRestored(""+amount));
+    }
+
+    public void removeMana(int amount) {
+        currentMana -= amount;
+
+        currentMana = clampMin(currentMana, 0);
+    }
+
+    public void addCoins(int amount) {
+        coins += amount;
+        Game.getInstance().addMessageToQueue(msgCoinsAdded("" + amount));
+    }
+
+    public boolean payCoins(int amount) {
+        if (coins - amount < 0) {
+            Game.getInstance().addMessageToQueue(msgNoCoins());
+            return false;
+        }
+
+        coins -= amount;
+        Game.getInstance().addMessageToQueue(msgCoinsRemoved("" + amount));
+
+        return true;
+    }
+
+    public void addToInventory(int item) {
+        inventory.add(item);
+    }
+
+    public boolean removeFromInventory(int item) {
+        if (inventory.contains(item)) {
+            inventory.remove(Integer.valueOf(item));
+            return true;
+        }
+
+        return false;
+    }
+
+
     public void attack(char attackType, Enemy enemy) {
         //attackType = 'S'; // Sword, Axe, Fire, Ice
         float attackValue = 0f;
         float hitChance = 0f;
-        float manaCost = 0f;
+        int manaCost = 0;
 
         switch (Character.toUpperCase(attackType)) {
             case 'S':
-                attackValue = baseDamage * 2;
-                hitChance = dexterity * 2;
+                attackValue = baseDamage * 0.2f;
+                hitChance = dexterity * 3;
                 break;
             case 'A':
-                attackValue = baseDamage * 5;
-                hitChance = dexterity;
+                attackValue = baseDamage * 0.5f;
+                hitChance = dexterity * 2;
                 break;
             case 'F':
-                attackValue = baseDamage * 10;
+                if (currentMana < 3) {
+                    Game.getInstance().addMessageToQueue("Not enough mana!");
+                    return;
+                }
+                attackValue = baseDamage * 2;
                 hitChance = intelligence * 5;
-                manaCost = 25;
+                manaCost = 3;
                 break;
 
             case 'I':
-                attackValue = baseDamage * 2;
+                if (currentMana < 5) {
+                    Game.getInstance().addMessageToQueue("Not enough mana!");
+                    return;
+                }
+                attackValue = baseDamage * 3;
                 hitChance = intelligence * 4;
-                manaCost = 10;
+                manaCost = 5;
                 break;
         }
 
-        mana -= manaCost;
-        enemy.applyDamage((byte) attackValue, hitChance);
+        removeMana(manaCost);
+
+        enemy.applyDamage(attackValue, hitChance, this);
     }
 
-    private Enemy enemy;
+    public void runAway() {
+        int coinsPenalty = 10;
 
-    public Enemy getThing() {
-        Date d = new Date();
-        return enemy;
+        String coinsLostMessage =  coinsPenalty > coins? "all" : "" + coinsPenalty;
+
+        Game.getInstance().addMessageToQueue(msgRunAway(coinsLostMessage));
+
+        coins -= coinsPenalty;
+        coins = clampMin(coins, 0);
+    }
+
+    public String inventoryToString() {
+        String inventoryInfo = inventory.size() > 0 ? " or use\n" : "";
+        inventoryInfo += inventory.contains(1) ? "[1] small HP (5) | " :"";
+        inventoryInfo += inventory.contains(2) ? "[2] big HP (20) | " : "";
+        inventoryInfo += inventory.contains(3) ? "[3] small MANA (5) | " : "";
+        inventoryInfo += inventory.contains(4) ? "[4] big MANA (10)" : "";
+
+        return inventoryInfo;
     }
 }

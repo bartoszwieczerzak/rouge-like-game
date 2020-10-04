@@ -4,23 +4,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static pl.sdacademy.ConsoleUtils.*;
 
-public class Enemy {
-
-    public static int enemiesCount = 0;
-
-    String name = "unnamed_enemy";
-    private byte health = 100;
-
-    private int strength = 1;
-    private float baseDamage = 1;
-    private float baseBlock = 1;
-    private float movementSpeed = 5.0f;
-    private float mana = 10;
-
-    private int coins = 10;
+public class Enemy  extends GameCharacter {
 
     private Guild guild = Guild.A;
-    private Buff buffs = null;
 
     private boolean isDead = false;
 
@@ -28,47 +14,38 @@ public class Enemy {
         return isDead;
     }
 
-    public byte getHealth() {
-        return health;
+    public Enemy(String name, Sex sex, int strength, int stamina, int dexterity, int intelligence, int wisdom, int charisma) {
+        super(name, sex, strength, stamina, dexterity, intelligence, wisdom, charisma);
+        Game.getInstance().enemiesCount++;
     }
 
-    public Enemy() {
-        printDebug("empty constructor called from Enemy class");
-        enemiesCount++;
-    }
-
-    public Enemy(String name) {
-        this.name = name;
-    }
-
-    public void getInfo() {
-        System.out.println("name: " + name + "\nhp: " + health);
-    }
-
-    public void applyDamage(byte amount, float attackHitChance) {
+    public void applyDamage(float amount, float attackHitChance, Hero hero) {
         float random = ThreadLocalRandom.current().nextFloat();
-        boolean isHit = attackHitChance < random * 100;
+        boolean isHit = attackHitChance > random * 100;
 
         System.out.println("[DEBUG] random: " + random + " attackChance: " + attackHitChance);
 
         if (isHit) {
-            System.out.println("Dealing " + c_red(String.valueOf(amount)) + " damage to " + name);
-            health -= amount;
+            Game.getInstance().addMessageToQueue(msgDamage(hero.name, name, String.valueOf(amount)));
+            currentHealth -= amount;
 
             // przypadek gdy wrog zginal
-            if(health < 0) {
-                health = 0;
+            if(currentHealth <= 0) {
+                currentHealth = 0;
 
                 isDead = true;
-                System.out.println("Enemy: " + name + " is dead!");
             }
         } else {
-            System.out.println("Enemy dodged this!");
+            Game.getInstance().addMessageToQueue("Enemy dodged attack!");
+            Game.getInstance().addMessageToQueue(msgDamage(hero.name, name, "0"));
         }
     }
 
     public void attack(Hero hero) {
-        hero.applyDamage((byte)5);
+        byte randomAttackValue = (byte)ThreadLocalRandom.current().nextInt(0, 6 + 1);
+        hero.applyDamage(randomAttackValue);
+
+        Game.getInstance().addMessageToQueue(msgDamage(name, hero.name, String.valueOf(randomAttackValue)));
     }
 
     public void getRandomTaunt() {
