@@ -1,7 +1,6 @@
-package pl.sdacademy;
+package bwgames;
 
-import static pl.sdacademy.ConsoleUtils.c_green;
-import static pl.sdacademy.Sex.*;
+import static bwgames.Sex.*;
 
 public class GameCharacter {
     //statistics given by player

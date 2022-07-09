@@ -1,7 +1,7 @@
-package pl.sdacademy;
+package bwgames;
 
-import static pl.sdacademy.ConsoleUtils.*;
-import static pl.sdacademy.Sex.*;
+import static bwgames.ConsoleUtils.*;
+import static bwgames.Sex.*;
 
 
 /**

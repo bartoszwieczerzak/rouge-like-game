@@ -1,10 +1,10 @@
-package pl.sdacademy;
+package bwgames;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static pl.sdacademy.ConsoleUtils.*;
+import static bwgames.ConsoleUtils.*;
 
-public class Enemy  extends GameCharacter {
+public class Enemy extends GameCharacter {
 
     private Guild guild = Guild.A;
 
@@ -23,7 +23,7 @@ public class Enemy  extends GameCharacter {
         float random = ThreadLocalRandom.current().nextFloat();
         boolean isHit = attackHitChance > random * 100;
 
-        System.out.println("[DEBUG] random: " + random + " attackChance: " + attackHitChance);
+        Debug.log("random: " + random + " attackChance: " + attackHitChance);
 
         if (isHit) {
             Game.getInstance().addMessageToQueue(msgDamage(hero.name, name, String.valueOf(amount)));

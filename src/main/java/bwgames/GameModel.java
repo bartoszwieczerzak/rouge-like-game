@@ -1,4 +1,4 @@
-package pl.sdacademy;
+package bwgames;
 
 public class GameModel {
     private Hero hero;

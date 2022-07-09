@@ -1,9 +1,9 @@
-package pl.sdacademy;
+package bwgames;
 
 import java.util.Formatter;
 import java.util.Scanner;
 
-public class ConsoleUtils {
+public abstract class ConsoleUtils {
     public static boolean debugMode = false;
     public static boolean errorLoggingMode = true;
 
@@ -82,6 +82,7 @@ public class ConsoleUtils {
         System.out.println(C_CYAN_BACKGROUND    + "C_CYAN_BACKGROUND"   + C_RESET);
         System.out.println(C_WHITE_BACKGROUND   + "C_WHITE_BACKGROUND"  + C_RESET);
     }
+
     public static final String _5_MARK = ">>>5|";
     public static final String _10_MARK = ">>>>>>>10|";
     public static final String _20_MARK = ">>>>>>>10|>>>>>>>20|";

@@ -1,11 +1,10 @@
-package pl.sdacademy;
+package bwgames;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static pl.sdacademy.ConsoleUtils.*;
-import static pl.sdacademy.GameMath.clampMax;
-import static pl.sdacademy.GameMath.clampMin;
+import static bwgames.GameMath.clampMax;
+import static bwgames.GameMath.clampMin;
 
 public class Hero extends GameCharacter {
 
@@ -22,9 +21,9 @@ public class Hero extends GameCharacter {
         if(currentHealth <= 0) {
             currentHealth = 0;
 
-            Game.getInstance().addMessageToQueue(msgDeath(name));
-            printDebug("PLAYER DIED - GAME OVER");
-            printDebug("YOU KILLED " + (Game.getInstance().enemiesCount - 1) + " enemies.");
+            Game.getInstance().addMessageToQueue(ConsoleUtils.msgDeath(name));
+            ConsoleUtils.printDebug("PLAYER DIED - GAME OVER");
+            ConsoleUtils.printDebug("YOU KILLED " + (Game.getInstance().enemiesCount - 1) + " enemies.");
 
             System.exit(0);
         }
@@ -34,14 +33,14 @@ public class Hero extends GameCharacter {
         currentHealth += amount;
 
         currentHealth = clampMax(currentHealth, health);
-        Game.getInstance().addMessageToQueue(msgHealed(""+amount));
+        Game.getInstance().addMessageToQueue(ConsoleUtils.msgHealed(""+amount));
     }
 
     public void addMana(int amount) {
         currentMana += amount;
 
         currentMana = clampMax(currentMana, mana);
-        Game.getInstance().addMessageToQueue(msgManaRestored(""+amount));
+        Game.getInstance().addMessageToQueue(ConsoleUtils.msgManaRestored(""+amount));
     }
 
     public void removeMana(int amount) {
@@ -52,17 +51,17 @@ public class Hero extends GameCharacter {
 
     public void addCoins(int amount) {
         coins += amount;
-        Game.getInstance().addMessageToQueue(msgCoinsAdded("" + amount));
+        Game.getInstance().addMessageToQueue(ConsoleUtils.msgCoinsAdded("" + amount));
     }
 
     public boolean payCoins(int amount) {
         if (coins - amount < 0) {
-            Game.getInstance().addMessageToQueue(msgNoCoins());
+            Game.getInstance().addMessageToQueue(ConsoleUtils.msgNoCoins());
             return false;
         }
 
         coins -= amount;
-        Game.getInstance().addMessageToQueue(msgCoinsRemoved("" + amount));
+        Game.getInstance().addMessageToQueue(ConsoleUtils.msgCoinsRemoved("" + amount));
 
         return true;
     }
@@ -127,7 +126,7 @@ public class Hero extends GameCharacter {
 
         String coinsLostMessage =  coinsPenalty > coins? "all" : "" + coinsPenalty;
 
-        Game.getInstance().addMessageToQueue(msgRunAway(coinsLostMessage));
+        Game.getInstance().addMessageToQueue(ConsoleUtils.msgRunAway(coinsLostMessage));
 
         coins -= coinsPenalty;
         coins = clampMin(coins, 0);

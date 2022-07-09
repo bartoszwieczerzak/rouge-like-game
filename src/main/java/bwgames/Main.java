@@ -1,15 +1,14 @@
-package pl.sdacademy;
-
-import static pl.sdacademy.ConsoleUtils.*;
+package bwgames;
 
 public class Main {
     public static void main(String[] args) {
 //        printDebug("debug test message off");
-        debugMode = true;
+        ConsoleUtils.debugMode = true;
 //        printDebug("debug test message on");
 //        printError("error test message");
 
 
+        Debug.log("GAME STARTING");
         Game.getInstance().start();
     }
 }

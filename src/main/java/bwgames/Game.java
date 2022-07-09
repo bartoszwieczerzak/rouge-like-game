@@ -1,12 +1,12 @@
-package pl.sdacademy;
+package bwgames;
 
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static pl.sdacademy.ConsoleUtils.msgNoPotionInInventory;
-import static pl.sdacademy.ConsoleUtils.msgPotionUsed;
+import static bwgames.ConsoleUtils.msgNoPotionInInventory;
+import static bwgames.ConsoleUtils.msgPotionUsed;
 
 public class Game {
 
