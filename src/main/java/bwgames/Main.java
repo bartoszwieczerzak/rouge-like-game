@@ -7,7 +7,6 @@ public class Main {
 //        printDebug("debug test message on");
 //        printError("error test message");
 
-
         Debug.log("GAME STARTING");
         Game.getInstance().start();
     }
