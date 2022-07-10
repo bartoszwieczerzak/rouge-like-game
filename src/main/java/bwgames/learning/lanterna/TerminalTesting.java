@@ -28,7 +28,9 @@ public class TerminalTesting {
 
         Terminal terminal = null;
         try {
+//            terminal = new FullScreenSwingTerminalFrame();
             terminal = defaultTerminalFactory.createTerminal();
+//            terminal = defaultTerminalFactory.createSwingTerminal();
 
             terminal.enterPrivateMode();
             terminal.setCursorVisible(false);
