@@ -18,7 +18,7 @@ import java.io.IOException;
  * https://github.com/mabe02/lanterna/blob/master/docs/contents.md
  */
 
-public class LanternaLearning {
+public class TerminalTesting {
     public static void main(String[] args) {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
 
